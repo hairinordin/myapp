@@ -43,6 +43,13 @@
         <td>
             <a class="btn btn-warning" href='{{ url("film/$film->film_id/edit") }}' role="button">Edit</a>
             <a class="btn btn-info" href='{{ url("film/$film->film_id") }}' role="button">Show</a>
+            
+            
+            <form action='{{ url("film/$film->film_id") }}' method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="button" class="btn btn-danger delete-confirm">Delete</button>
+            </form>
         </td>
     </tr>
   @endforeach
@@ -51,5 +58,27 @@
 </table>
 
 {{ $films->links() }}
+
+
+<script>
+    $('.delete-confirm').click(function(event){
+
+        var form = $(this).closest("form");
+
+        Swal.fire({
+            title: 'Are You sure you want to delete?',
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true
+        }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        })
+    });
+
+</script>
 
 @endsection
