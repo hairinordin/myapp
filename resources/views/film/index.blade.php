@@ -14,6 +14,8 @@
         <p>{{ $msg }}</p>
     </div>
 @endif
+@include('film.search')
+<br><br>
 
 <div class="d-flex justify-content-end mb-4">
     <a class="btn btn-primary" href="{{ url('create-pdf') }}">Export PDF</a>
@@ -47,8 +49,8 @@
         <td>
             <a class="btn btn-warning" href='{{ url("film/$film->film_id/edit") }}' role="button">Edit</a>
             <a class="btn btn-info" href='{{ url("film/$film->film_id") }}' role="button">Show</a>
-            
-            
+
+
             <form action='{{ url("film/$film->film_id") }}' method="POST">
                 @csrf
                 @method('DELETE')
@@ -57,7 +59,7 @@
         </td>
     </tr>
   @endforeach
-   
+
   </tbody>
 </table>
 
