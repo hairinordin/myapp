@@ -50,3 +50,7 @@ Route::prefix('user')->group(function(){
         return "Hai, Ini page user";
     });
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

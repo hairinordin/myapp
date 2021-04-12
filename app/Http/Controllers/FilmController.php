@@ -7,6 +7,10 @@ use App\Models\Film;
 
 class FilmController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -140,5 +144,20 @@ class FilmController extends Controller
     public function destroy($id)
     {
         //
+
+        //$filmActor:: FilmActor::where(['film_id','=',$id])->delete();
+        
+        $film = Film::find($id);
+        
+        if($film->delete()){
+            //berjaya
+            return redirect()->route('film.index')
+            ->with('success','Berjaya delete film');
+        }else{
+             //tak berjaya
+             return redirect()->route('film.index')
+             ->with('danger','Tidak berjaya delete');
+        }
+      
     }
 }
