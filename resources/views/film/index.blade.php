@@ -15,6 +15,10 @@
     </div>
 @endif
 
+<div class="d-flex justify-content-end mb-4">
+    <a class="btn btn-primary" href="{{ url('create-pdf') }}">Export PDF</a>
+</div>
+
 <a class="btn btn-primary" href="{{ url('film/create') }}" role="button">Create</a>
 
 <table class="table">

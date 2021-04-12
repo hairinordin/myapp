@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Film;
+use PDF;
 
 class FilmController extends Controller
 {
@@ -159,5 +160,15 @@ class FilmController extends Controller
              ->with('danger','Tidak berjaya delete');
         }
       
+    }
+
+    public function createPDF(){
+        $films = Film::limit(10)->get();
+
+        $pdf = PDF::loadView('film.view_pdf',[
+            'films'=>$films
+        ]);
+
+        return $pdf->download('list_film.pdf');
     }
 }
