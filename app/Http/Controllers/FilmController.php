@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Film;
+use PDF;
 
 class FilmController extends Controller
 {
@@ -16,15 +17,24 @@ class FilmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        //title,description,release year,language,rating
-        $data = Film::paginate(10);
+        $url_data = $request->query(); // Assign GET data
+
+        $data = Film::where(function ($query) use ($url_data){
+            if(!empty($url_data['title'])){
+                $query->where('title','=',$url_data['title']);
+            }
+        })->paginate(10);
+
+//        dd($url_data['title']);
+
+
 
         return view('film.index',[
             'films'=>$data,
-            'bil'=> (request()->input('page',1) -1) * 10
+            'bil'=>(request()->input('page', 1) - 1) * 10,
         ]);
     }
 
@@ -55,9 +65,9 @@ class FilmController extends Controller
     {
         //
         $this->validate($request,Film::$createRules,Film::$customeMsg);
-    
-    
-        
+
+
+
         // dd('exit');
 
         if(Film::create($request->all())){
@@ -70,8 +80,8 @@ class FilmController extends Controller
             ->with('danger','Tidak berjaya di daftar');
         }
 
-        
-     
+
+
     }
 
     /**
@@ -146,9 +156,9 @@ class FilmController extends Controller
         //
 
         //$filmActor:: FilmActor::where(['film_id','=',$id])->delete();
-        
+
         $film = Film::find($id);
-        
+
         if($film->delete()){
             //berjaya
             return redirect()->route('film.index')
@@ -158,6 +168,16 @@ class FilmController extends Controller
              return redirect()->route('film.index')
              ->with('danger','Tidak berjaya delete');
         }
-      
+
+    }
+
+    public function createPDF(){
+        $films = Film::limit(10)->get();
+
+        $pdf = PDF::loadView('film.view_pdf',[
+            'films'=>$films
+        ]);
+
+        return $pdf->download('list_film.pdf');
     }
 }

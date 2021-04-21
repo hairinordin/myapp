@@ -15,7 +15,15 @@ use Illuminate\Support\Facades\Route;
 
 //default root route
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+
+    if(empty(Auth::user()->id)){
+        //kalau belom login
+        return redirect()->route('login');
+    }else{
+        //klau dah login
+        return redirect()->route('dashboard');
+    }
 });
 
 
